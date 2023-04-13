@@ -1,0 +1,2 @@
+# CopyEHentaiTitleTextAndTorrentLinkText
+复制ehentai标题和磁链文本
