@@ -27,6 +27,7 @@ function AddElement() {
             "h1_2": h1_2.innerText,
             "magnetLinks": []
         };
+        FillClipboard(data,"标题文本已复制")
         // Create a new Promise object
         var torrentLink = GetTorrentLink();
         const fetchData = new Promise((resolve, reject) => {
@@ -44,42 +45,17 @@ function AddElement() {
                     // Resolve the Promise with the magnetLinks array
                     resolve(magnetLinks);
                 })
-                .catch(error => {
-                    console.error(error);
-                    // 处理错误逻辑
-                    // Your code that uses the magnetLinks array goes here
-                    //data.magnetLinks = magnetLinks;
-                    // 将数据转换为JSON字符串
-                    var jsonData = JSON.stringify(data);
-
-                    // 复制JSON字符串到剪贴板
-                    navigator.clipboard.writeText(jsonData).then(function () {
-                        // 文本复制成功，显示弹窗
-                        CreatePop("磁链文本获取失败，请重试")
-                    }, function () {
-                        // 复制失败，显示弹窗
-                        CreatePop("复制失败，请重试")
-                    });
-                });
+                .catch(error => reject(error));
         });
 
         // Call the fetchData Promise and wait for it to resolve
         fetchData.then(magnetLinks => {
             // Your code that uses the magnetLinks array goes here
             data.magnetLinks = magnetLinks;
-            // 将数据转换为JSON字符串
-            var jsonData = JSON.stringify(data);
-
-            // 复制JSON字符串到剪贴板
-            navigator.clipboard.writeText(jsonData).then(function () {
-                // 复制成功，显示弹窗
-                CreatePop("已复制")
-            }, function () {
-                // 复制失败，显示弹窗
-                CreatePop("复制失败，请重试")
-            });
+            FillClipboard(data,"标题文本与磁链文本已复制")
+        }, function () {
+            FillClipboard(data,"磁链文本复制失败")
         }).catch(error => console.error(error));
         CreatePop("复制中，请稍等")
-
     });
 }
